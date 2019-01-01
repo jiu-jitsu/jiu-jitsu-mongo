@@ -1,0 +1,9 @@
+{
+  "name": "jiu-jitsu-mongo",
+  "version": "0.0.1",
+  "author": "Vitaly Anagorsky <vitaly@anagorsky.com>",
+  "dependencies": {
+    "jiu-jitsu-bson": "git+https://github.com/jiu-jitsu/jiu-jitsu-bson.git",
+    "jiu-jitsu-error": "git+https://github.com/jiu-jitsu/jiu-jitsu-error.git"
+  }
+}

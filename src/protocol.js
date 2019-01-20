@@ -1,19 +1,19 @@
 
 /**
- * Native
+ *
  */
 
 const zlib = require('zlib')
 const events = require('events')
 
 /**
- * Jiu-Jitsu
+ *
  */
 
 const ___bson = require('jiu-jitsu-bson')
 
 /**
- * Constants
+ *
  */
 
 const OP_MSG = 2013
@@ -259,7 +259,7 @@ class Protocol extends events {
 }
 
 /**
- * Return
+ *
  */
 
 module.exports = Protocol

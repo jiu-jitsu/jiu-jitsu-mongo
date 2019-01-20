@@ -1,6 +1,6 @@
 
 /**
- * Native
+ *
  */
 
 const net = require('net')
@@ -8,19 +8,19 @@ const util = require('util')
 const events = require('events')
 
 /**
- * Jiu-Jitsu
+ *
  */
 
 const ___error = require('jiu-jitsu-error')
 
 /**
- * Protocol
+ *
  */
 
 const ___protocol = require('./protocol')
 
 /**
- * Mongo class
+ *
  */
 
 class Mongo extends events {
@@ -39,7 +39,7 @@ class Mongo extends events {
 		this.___connect()
 
 		/**
-		 * Workaround
+		 *
 		 */
 
 		this.find = util.promisify(this.find)
@@ -172,7 +172,7 @@ class Mongo extends events {
 		 * x - default collection name
 		 */
 
-		___message.find = 'x'
+		___message.find = 'table'
 		___message.$db = db
 		___message.filter = message.filter || {}
 		___message.sort = message.sort || {}
@@ -206,7 +206,7 @@ class Mongo extends events {
 		const ___message = {}
 		const ___options = {}
 
-		___message.insert = 'x'
+		___message.insert = 'table'
 		___message.$db = db
 		___message.documents = []
 		___message.documents.push(message)
@@ -237,7 +237,7 @@ class Mongo extends events {
 		const ___message = {}
 		const ___options = {}
 
-		___message.update = 'x'
+		___message.update = 'table'
 		___message.$db = db
 		___message.updates = []
 		___message.updates[0] = {}
@@ -275,7 +275,7 @@ class Mongo extends events {
 		 * limit - specify either a 0 to delete all matching documents, or 1 to delete a single document
 		 */
 
-		___message.delete = 'x'
+		___message.delete = 'table'
 		___message.$db = db
 		___message.deletes = []
 		___message.deletes[0] = {}
@@ -307,7 +307,7 @@ class Mongo extends events {
 		const ___message = {}
 		const ___options = {}
 
-		___message.aggregate = 'x'
+		___message.aggregate = 'table'
 		___message.$db = db
 		___message.pipeline = []
 		___message.pipeline = message.pipeline
@@ -328,7 +328,7 @@ class Mongo extends events {
 }
 
 /**
- * Export
+ *
  */
 
 module.exports = Mongo

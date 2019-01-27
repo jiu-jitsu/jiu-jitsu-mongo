@@ -152,6 +152,82 @@ class Mongo extends events {
 
 	}
 
+	___xid (callback) {
+
+		if (!this.___connected || this.___reconnecting) {
+
+			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+
+		}
+
+		const id = this.___id++
+		const db = this.___endpoint.db
+
+		const ___message = {}
+		const ___options = {}
+
+		/**
+		 * s - sequence
+		 */
+
+		___message.findandmodify = 's'
+		___message.$db = db
+		___message.query = {}
+		___message.query.key = 'x'
+		___message.update = {}
+		___message.update.$inc = {}
+		___message.update.$inc.counter = 1
+		___message.fields = {}
+		___message.fields._id = 0
+		___message.projection = {}
+		___message.projection._id = 0
+		___message.upsert = true
+		___message.new = true
+
+		___options.id = id
+		___options.db = db
+
+		const buffer = this.___socket.___protocol.write(___message, ___options)
+
+		this.___buffers.push(buffer)
+		this.___callbacks[id] = (error, data) => callback(error, !error && data.counter || null)
+		this.___write()
+
+	}
+
+	___insertWithXid (xid, message, callback) {
+
+		if (!this.___connected || this.___reconnecting) {
+
+			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+
+		}
+
+		message.id = xid
+
+		const id = this.___id++
+		const db = this.___endpoint.db
+
+		const ___message = {}
+		const ___options = {}
+
+		___message.insert = 'x'
+		___message.$db = db
+		___message.documents = []
+		___message.documents.push(message)
+		___message.ordered = true
+
+		___options.id = id
+		___options.db = db
+
+		const buffer = this.___socket.___protocol.write(___message, ___options)
+
+		this.___buffers.push(buffer)
+		this.___callbacks[id] = (error) => callback(error, message)
+		this.___write()
+
+	}
+
 	find (message, callback) {
 
 		message = message || {}
@@ -168,11 +244,7 @@ class Mongo extends events {
 		const ___message = {}
 		const ___options = {}
 
-		/**
-		 * x - default collection name
-		 */
-
-		___message.find = 'table'
+		___message.find = 'x'
 		___message.$db = db
 		___message.filter = message.filter || {}
 		___message.sort = message.sort || {}
@@ -194,32 +266,7 @@ class Mongo extends events {
 
 	insert (message, callback) {
 
-		if (!this.___connected || this.___reconnecting) {
-
-			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
-
-		}
-
-		const id = this.___id++
-		const db = this.___endpoint.db
-
-		const ___message = {}
-		const ___options = {}
-
-		___message.insert = 'table'
-		___message.$db = db
-		___message.documents = []
-		___message.documents.push(message)
-		___message.ordered = true
-
-		___options.id = id
-		___options.db = db
-
-		const buffer = this.___socket.___protocol.write(___message, ___options)
-
-		this.___buffers.push(buffer)
-		this.___callbacks[id] = (error) => callback(error, message)
-		this.___write()
+		this.___xid((error, xid) => !error ? this.___insertWithXid(xid, message, callback) : callback(error))
 
 	}
 
@@ -237,7 +284,7 @@ class Mongo extends events {
 		const ___message = {}
 		const ___options = {}
 
-		___message.update = 'table'
+		___message.update = 'x'
 		___message.$db = db
 		___message.updates = []
 		___message.updates[0] = {}
@@ -275,7 +322,7 @@ class Mongo extends events {
 		 * limit - specify either a 0 to delete all matching documents, or 1 to delete a single document
 		 */
 
-		___message.delete = 'table'
+		___message.delete = 'x'
 		___message.$db = db
 		___message.deletes = []
 		___message.deletes[0] = {}
@@ -307,7 +354,7 @@ class Mongo extends events {
 		const ___message = {}
 		const ___options = {}
 
-		___message.aggregate = 'table'
+		___message.aggregate = 'x'
 		___message.$db = db
 		___message.pipeline = []
 		___message.pipeline = message.pipeline

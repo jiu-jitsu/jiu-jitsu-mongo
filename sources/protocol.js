@@ -10,7 +10,7 @@ const events = require('events')
  *
  */
 
-const ___bson = require('jiu-jitsu-bson')
+const ___bson = require('./bson')
 
 /**
  *

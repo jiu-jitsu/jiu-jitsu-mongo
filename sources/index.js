@@ -11,12 +11,7 @@ const events = require('events')
  *
  */
 
-const ___error = require('jiu-jitsu-error')
-
-/**
- *
- */
-
+const ___error = require('./error')
 const ___protocol = require('./protocol')
 
 /**
@@ -113,7 +108,7 @@ class Mongo extends events {
 
 	___onEnd (error) {
 
-		this.___reconnect()
+		this.___reconnect(error)
 
 	}
 

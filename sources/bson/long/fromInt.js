@@ -1,9 +1,13 @@
 
 /**
- * Returns a Long representing the given (32-bit) integer value.
+ *
  */
 
 module.exports = (value) => {
+
+	/**
+	 *
+	 */
 
 	return {
 		low: value | 0,

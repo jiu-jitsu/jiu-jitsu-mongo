@@ -1,13 +1,13 @@
 
 /**
- * Local
+ *
  */
 
 const fromInt = require('./fromInt')
 const fromBits = require('./fromBits')
 
 /**
- * Constants
+ *
  */
 
 const ONE = fromInt(1)
@@ -23,7 +23,7 @@ const MIN_VALUE = fromBits(0, 0x80000000 | 0)
 const MAX_VALUE = fromBits(0xFFFFFFFF | 0, 0x7FFFFFFF | 0)
 
 /**
- * Constants
+ *
  */
 
 exports.ONE = ONE

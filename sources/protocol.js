@@ -30,9 +30,21 @@ const COMPRESSOR_ID_ZLIB = 2
 
 class Protocol extends events {
 
+	/**
+	 *
+	 */
+
 	constructor () {
 
+		/**
+		 *
+		 */
+
 		super()
+
+		/**
+		 *
+		 */
 
 		this.___read = {}
 		this.___read.buffer = null
@@ -43,28 +55,64 @@ class Protocol extends events {
 
 	read (chunk) {
 
+		/**
+		 *
+		 */
+
 		if (chunk) {
+
+			/**
+			 *
+			 */
 
 			this.___read.length += chunk.length
 			this.___read.buffers.push(chunk)
 
 		}
 
+		/**
+		 *
+		 */
+
 		if (!this.___read.buffers[0]) {
+
+			/**
+			 *
+			 */
 
 			return
 
 		}
+
+		/**
+		 *
+		 */
 
 		if (!this.___read.buffers[0].length) {
 
+			/**
+			 *
+			 */
+
 			return
 
 		}
 
+		/**
+		 *
+		 */
+
 		const header_length = this.___read.buffers[0].readInt32LE(0)
 
+		/**
+		 *
+		 */
+
 		if (this.___read.length < header_length) {
+
+			/**
+			 *
+			 */
 
 			return
 
@@ -82,19 +130,39 @@ class Protocol extends events {
 
 		const next = this.___read.buffer.slice(0, header_length)
 
+		/**
+		 *
+		 */
+
 		const header_message_length = next.readInt32LE(0)
 		const header_req_id = next.readInt32LE(4)
 		const header_res_id = next.readInt32LE(8)
 		const header_op_code = next.readInt32LE(12)
 
+		/**
+		 *
+		 */
+
 		const original_op_code = next.readInt32LE(16)
 		const uncompressed_size = next.readInt32LE(20)
 		const compressor_id = next.readUInt8(24)
 
+		/**
+		 *
+		 */
+
 		const compressed = next.slice(25)
 		const decompressed = zlib.unzipSync(compressed)
 
+		/**
+		 *
+		 */
+
 		const body = ___bson.read(decompressed.slice(5))
+
+		/**
+		 *
+		 */
 
 		const message = {
 			id: null,
@@ -102,25 +170,61 @@ class Protocol extends events {
 			data: null
 		}
 
+		/**
+		 *
+		 */
+
 		message.id = header_res_id
+
+		/**
+		 *
+		 */
 
 		if (body.writeErrors) {
 
+			/**
+			 *
+			 */
+
 			message.error = body.writeErrors[0]
+
+			/**
+			 *
+			 */
 
 		} else if (body.errmsg) {
 
+			/**
+			 *
+			 */
+
 			message.error = body
 
+			/**
+			 *
+			 */
+
 		} else {
+
+			/**
+			 *
+			 */
 
 			message.data = body.cursor && body.cursor.firstBatch || body.value || body
 
 		}
 
+		/**
+		 *
+		 */
+
 		this.___read.buffer = this.___read.buffer.slice(header_length, this.___read.length)
 		this.___read.buffers = this.___read.buffer.length ? [this.___read.buffer] : []
 		this.___read.length = this.___read.buffer.length
+
+		/**
+		 *
+		 */
 
 		this.emit('message', message)
 		this.read()
@@ -172,6 +276,10 @@ class Protocol extends events {
 
 		)
 
+		/**
+		 *
+		 */
+
 		buffer.writeInt32LE(buffer.length, 0)
 		buffer.writeInt32LE(options.id, 4)
 		buffer.writeInt32LE(0, 8)
@@ -179,6 +287,10 @@ class Protocol extends events {
 		buffer.writeInt32LE(0, 16)
 		buffer.writeUInt8(0, 20)
 		buffer_message.copy(buffer, 21)
+
+		/**
+		 *
+		 */
 
 		return this.___writeZip(buffer, options)
 
@@ -241,16 +353,32 @@ class Protocol extends events {
 
 		)
 
+		/**
+		 *
+		 */
+
 		buffer.writeInt32LE(16 + 9 + compressed.length, 0)
 		buffer.writeInt32LE(options.id, 4)
 		buffer.writeInt32LE(0, 8)
 		buffer.writeInt32LE(OP_COMPRESSED, 12)
 
+		/**
+		 *
+		 */
+
 		buffer.writeInt32LE(decompressed.readInt32LE(12), 16)
 		buffer.writeInt32LE(to_be_compressed.length, 20)
 		buffer.writeUInt8(COMPRESSOR_ID_ZLIB, 24)
 
+		/**
+		 *
+		 */
+
 		compressed.copy(buffer, 25)
+
+		/**
+		 *
+		 */
 
 		return buffer
 

@@ -20,9 +20,21 @@ const ___protocol = require('./protocol')
 
 class Mongo extends events {
 
+	/**
+	 *
+	 */
+
 	constructor (endpoint) {
 
+		/**
+		 *
+		 */
+
 		super()
+
+		/**
+		 *
+		 */
 
 		this.___id = 1
 		this.___buffers = []
@@ -47,6 +59,10 @@ class Mongo extends events {
 
 	___connect () {
 
+		/**
+		 *
+		 */
+
 		this.___socket = new net.Socket()
 		this.___socket
 
@@ -60,20 +76,40 @@ class Mongo extends events {
 
 	___reconnect (error) {
 
+		/**
+		 *
+		 */
+
 		const ids = Object.keys(this.___callbacks)
 
+		/**
+		 *
+		 */
+
 		ids.forEach((id) => this.___callbacks[id] && this.___callbacks[id](___error('jiu-jitsu-mongo/MONGO_CONNECTION_HAS_BEEN_CLOSED', error)))
+
+		/**
+		 *
+		 */
 
 		this.___buffers = []
 		this.___callbacks = {}
 		this.___reconnecting = true
 		this.___socket.___protocol.flush()
 
+		/**
+		 *
+		 */
+
 		setTimeout(() => this.___connect(), this.___timeout)
 
 	}
 
 	___protocol () {
+
+		/**
+		 *
+		 */
 
 		this.___socket.___protocol = new ___protocol()
 		this.___socket.___protocol.on('message', (message) => this.___onMessage(message))
@@ -82,13 +118,25 @@ class Mongo extends events {
 
 	___onConnect (error) {
 
+		/**
+		 *
+		 */
+
 		this.___protocol()
 		this.___reconnecting = false
 
+		/**
+		 *
+		 */
+
 		if (!this.___connected) {
 
+			/**
+			 *
+			 */
+
 			this.___connected = true
-			process.nextTick(() => this.emit('ready'))
+			process.nextTick(() => this.emit('ready', error))
 
 		}
 
@@ -96,11 +144,19 @@ class Mongo extends events {
 
 	___onError (error) {
 
+		/**
+		 *
+		 */
+
 		this.___reconnect(error)
 
 	}
 
 	___onData (chunk) {
+
+		/**
+		 *
+		 */
 
 		this.___socket.___protocol.read(chunk)
 
@@ -108,23 +164,47 @@ class Mongo extends events {
 
 	___onEnd (error) {
 
+		/**
+		 *
+		 */
+
 		this.___reconnect(error)
 
 	}
 
 	___onMessage (message) {
 
+		/**
+		 *
+		 */
+
 		const callback = this.___callbacks[message.id]
 
+		/**
+		 *
+		 */
+
 		if (!callback) {
+
+			/**
+			 *
+			 */
 
 			return
 
 		} else {
 
+			/**
+			 *
+			 */
+
 			delete this.___callbacks[message.id]
 
 		}
+
+		/**
+		 *
+		 */
 
 		return callback(message.error, message.data) | this.___write()
 
@@ -132,112 +212,80 @@ class Mongo extends events {
 
 	___write () {
 
+		/**
+		 *
+		 */
+
 		const len = this.___buffers.length
 
+		/**
+		 *
+		 */
+
 		if (!len) {
+
+			/**
+			 *
+			 */
 
 			return
 
 		}
 
+		/**
+		 *
+		 */
+
 		const buffer = Buffer.concat(this.___buffers)
+
+		/**
+		 *
+		 */
 
 		this.___buffers = []
 		this.___socket.write(buffer)
 
 	}
 
-	___xid (callback) {
+	find (message, callback) {
+
+		/**
+		 *
+		 */
+
+		message = message || {}
+
+		/**
+		 *
+		 */
 
 		if (!this.___connected || this.___reconnecting) {
+
+			/**
+			 *
+			 */
 
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
 
 		}
 
+		/**
+		 *
+		 */
+
 		const id = this.___id++
 		const db = this.___endpoint.db
+
+		/**
+		 *
+		 */
 
 		const ___message = {}
 		const ___options = {}
 
 		/**
-		 * s - sequence
+		 *
 		 */
-
-		___message.findandmodify = 's'
-		___message.$db = db
-		___message.query = {}
-		___message.query.key = 'x'
-		___message.update = {}
-		___message.update.$inc = {}
-		___message.update.$inc.counter = 1
-		___message.fields = {}
-		___message.fields._id = 0
-		___message.projection = {}
-		___message.projection._id = 0
-		___message.upsert = true
-		___message.new = true
-
-		___options.id = id
-		___options.db = db
-
-		const buffer = this.___socket.___protocol.write(___message, ___options)
-
-		this.___buffers.push(buffer)
-		this.___callbacks[id] = (error, data) => callback(error, !error && data.counter || null)
-		this.___write()
-
-	}
-
-	___insertWithXid (xid, message, callback) {
-
-		if (!this.___connected || this.___reconnecting) {
-
-			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
-
-		}
-
-		message.id = xid
-
-		const id = this.___id++
-		const db = this.___endpoint.db
-
-		const ___message = {}
-		const ___options = {}
-
-		___message.insert = 'x'
-		___message.$db = db
-		___message.documents = []
-		___message.documents.push(message)
-		___message.ordered = true
-
-		___options.id = id
-		___options.db = db
-
-		const buffer = this.___socket.___protocol.write(___message, ___options)
-
-		this.___buffers.push(buffer)
-		this.___callbacks[id] = (error) => callback(error, message)
-		this.___write()
-
-	}
-
-	find (message, callback) {
-
-		message = message || {}
-
-		if (!this.___connected || this.___reconnecting) {
-
-			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
-
-		}
-
-		const id = this.___id++
-		const db = this.___endpoint.db
-
-		const ___message = {}
-		const ___options = {}
 
 		___message.find = 'x'
 		___message.$db = db
@@ -248,10 +296,22 @@ class Mongo extends events {
 		___message.projection = message.projection || {}
 		___message.projection._id = 0
 
+		/**
+		 *
+		 */
+
 		___options.id = id
 		___options.db = db
 
+		/**
+		 *
+		 */
+
 		const buffer = this.___socket.___protocol.write(___message, ___options)
+
+		/**
+		 *
+		 */
 
 		this.___buffers.push(buffer)
 		this.___callbacks[id] = (error, data) => callback(error, data)
@@ -261,23 +321,100 @@ class Mongo extends events {
 
 	insert (message, callback) {
 
-		this.___xid((error, xid) => !error ? this.___insertWithXid(xid, message, callback) : callback(error))
-
-	}
-
-	update (message, callback) {
+		/**
+		 *
+		 */
 
 		if (!this.___connected || this.___reconnecting) {
+
+			/**
+			 *
+			 */
 
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
 
 		}
 
+		/**
+		 *
+		 */
+
 		const id = this.___id++
 		const db = this.___endpoint.db
 
+		/**
+		 *
+		 */
+
 		const ___message = {}
 		const ___options = {}
+
+		/**
+		 *
+		 */
+
+		___message.insert = 'x'
+		___message.$db = db
+		___message.documents = []
+		___message.documents.push(message)
+		___message.ordered = true
+
+		/**
+		 *
+		 */
+
+		___options.id = id
+		___options.db = db
+
+		/**
+		 *
+		 */
+
+		const buffer = this.___socket.___protocol.write(___message, ___options)
+
+		/**
+		 *
+		 */
+
+		this.___buffers.push(buffer)
+		this.___callbacks[id] = (error) => callback(error, message)
+		this.___write()
+
+	}
+
+	update (message, callback) {
+
+		/**
+		 *
+		 */
+
+		if (!this.___connected || this.___reconnecting) {
+
+			/**
+			 *
+			 */
+
+			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+
+		}
+
+		/**
+		 *
+		 */
+
+		const id = this.___id++
+		const db = this.___endpoint.db
+
+		/**
+		 *
+		 */
+
+		const ___message = {}
+		const ___options = {}
+
+		/**
+		 *
+		 */
 
 		___message.update = 'x'
 		___message.$db = db
@@ -288,10 +425,22 @@ class Mongo extends events {
 		___message.updates[0].multi = !!message.multi || false
 		___message.updates[0].upsert = !!message.upsert || false
 
+		/**
+		 *
+		 */
+
 		___options.id = id
 		___options.db = db
 
+		/**
+		 *
+		 */
+
 		const buffer = this.___socket.___protocol.write(___message, ___options)
+
+		/**
+		 *
+		 */
 
 		this.___buffers.push(buffer)
 		this.___callbacks[id] = (error, data) => callback(error, !error && data && data.ok && data.n || 0)
@@ -301,14 +450,30 @@ class Mongo extends events {
 
 	remove (message, callback) {
 
+		/**
+		 *
+		 */
+
 		if (!this.___connected || this.___reconnecting) {
+
+			/**
+			 *
+			 */
 
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
 
 		}
 
+		/**
+		 *
+		 */
+
 		const id = this.___id++
 		const db = this.___endpoint.db
+
+		/**
+		 *
+		 */
 
 		const ___message = {}
 		const ___options = {}
@@ -324,10 +489,22 @@ class Mongo extends events {
 		___message.deletes[0].q = message.filter || {}
 		___message.deletes[0].limit = !message.multi && 1 || 0
 
+		/**
+		 *
+		 */
+
 		___options.id = id
 		___options.db = db
 
+		/**
+		 *
+		 */
+
 		const buffer = this.___socket.___protocol.write(___message, ___options)
+
+		/**
+		 *
+		 */
 
 		this.___buffers.push(buffer)
 		this.___callbacks[id] = (error, data) => callback(error, !error && data && data.ok && data.n || 0)
@@ -337,17 +514,37 @@ class Mongo extends events {
 
 	aggregate (message, callback) {
 
+		/**
+		 *
+		 */
+
 		if (!this.___connected || this.___reconnecting) {
+
+			/**
+			 *
+			 */
 
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
 
 		}
 
+		/**
+		 *
+		 */
+
 		const id = this.___id++
 		const db = this.___endpoint.db
 
+		/**
+		 *
+		 */
+
 		const ___message = {}
 		const ___options = {}
+
+		/**
+		 *
+		 */
 
 		___message.aggregate = 'x'
 		___message.$db = db
@@ -356,10 +553,22 @@ class Mongo extends events {
 		___message.cursor = {}
 		___message.cursor.batchSize = message.limit || 999999999
 
+		/**
+		 *
+		 */
+
 		___options.id = id
 		___options.db = db
 
+		/**
+		 *
+		 */
+
 		const buffer = this.___socket.___protocol.write(___message, ___options)
+
+		/**
+		 *
+		 */
 
 		this.___buffers.push(buffer)
 		this.___callbacks[id] = (error, data) => callback(error, !error && data || null)

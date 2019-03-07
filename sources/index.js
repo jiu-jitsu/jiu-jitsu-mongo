@@ -54,6 +54,7 @@ class Mongo extends events {
 		this.update = util.promisify(this.update)
 		this.remove = util.promisify(this.remove)
 		this.aggregate = util.promisify(this.aggregate)
+		this.createIndex = util.promisify(this.createIndex)
 
 	}
 
@@ -548,7 +549,6 @@ class Mongo extends events {
 
 		___message.aggregate = 'x'
 		___message.$db = db
-		___message.pipeline = []
 		___message.pipeline = message.pipeline
 		___message.cursor = {}
 		___message.cursor.batchSize = message.limit || 999999999
@@ -572,6 +572,102 @@ class Mongo extends events {
 
 		this.___buffers.push(buffer)
 		this.___callbacks[id] = (error, data) => callback(error, !error && data || null)
+		this.___write()
+
+	}
+
+	createIndex (message, callback) {
+
+		/**
+		 *
+		 */
+
+		if (!this.___connected || this.___reconnecting) {
+
+			/**
+			 *
+			 */
+
+			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+
+		}
+
+		/**
+		 *
+		 */
+
+		const id = this.___id++
+		const db = this.___endpoint.db
+
+		/**
+		 *
+		 */
+
+		const ___message = {}
+		const ___options = {}
+
+		/**
+		 *
+		 */
+
+		const indexKey = message.keys.reduce((keys, key) => {
+
+			/**
+			 *
+			 */
+
+			keys[key] = 1;
+
+			/**
+			 *
+			 */
+
+			return keys;
+
+			/**
+			 *
+			 */
+
+		}, {})
+
+		/**
+		 *
+		 */
+
+		const indexName = `${!message.unique && 'ix' || 'ux'}@${message.keys.join('|')}`
+
+		/**
+		 *
+		 */
+
+		___message.createIndexes = 'x'
+		___message.$db = db
+		___message.indexes = []
+		___message.indexes[0] = {}
+		___message.indexes[0].key = indexKey
+		___message.indexes[0].name = indexName
+		___message.indexes[0].unique = !!message.unique
+		___message.indexes[0].background = !!message.background
+
+		/**
+		 *
+		 */
+
+		___options.id = id
+		___options.db = db
+
+		/**
+		 *
+		 */
+
+		const buffer = this.___socket.___protocol.write(___message, ___options)
+
+		/**
+		 *
+		 */
+
+		this.___buffers.push(buffer)
+		this.___callbacks[id] = (error, data) => callback(error, !error && data && data.ok || null)
 		this.___write()
 
 	}

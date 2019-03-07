@@ -610,31 +610,19 @@ class Mongo extends events {
 		 *
 		 */
 
-		const indexKey = message.keys.reduce((keys, key) => {
-
-			/**
-			 *
-			 */
-
-			keys[key] = 1;
-
-			/**
-			 *
-			 */
-
-			return keys;
-
-			/**
-			 *
-			 */
-
-		}, {})
+		const fields = Object.keys(message.key)
 
 		/**
 		 *
 		 */
 
-		const indexName = `${!message.unique && 'ix' || 'ux'}@${message.keys.join('|')}`
+		const indexKey = message.key
+
+		/**
+		 *
+		 */
+
+		const indexName = `${!message.unique && 'ix' || 'ux'}@${fields.join('|')}`
 
 		/**
 		 *

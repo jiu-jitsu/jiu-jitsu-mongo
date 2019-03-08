@@ -37,7 +37,6 @@ class Mongo extends events {
 		 */
 
 		this.___id = 1
-		this.___buffers = []
 		this.___callbacks = {}
 		this.___timeout = 1000
 		this.___connected = false
@@ -54,7 +53,20 @@ class Mongo extends events {
 		this.update = util.promisify(this.update)
 		this.remove = util.promisify(this.remove)
 		this.aggregate = util.promisify(this.aggregate)
+		this.dropIndex = util.promisify(this.dropIndex)
 		this.createIndex = util.promisify(this.createIndex)
+		this.getIndexes = util.promisify(this.getIndexes)
+
+	}
+
+	___protocol () {
+
+		/**
+		 *
+		 */
+
+		this.___socket.___protocol = new ___protocol()
+		this.___socket.___protocol.on('message', (message) => this.___onMessage(message))
 
 	}
 
@@ -87,7 +99,9 @@ class Mongo extends events {
 		 *
 		 */
 
-		ids.forEach((id) => this.___callbacks[id] && this.___callbacks[id](___error('jiu-jitsu-mongo/MONGO_CONNECTION_HAS_BEEN_CLOSED', error)))
+		ids.forEach((id) =>
+			this.___callbacks[id] &&
+			this.___callbacks[id](___error('jiu-jitsu-mongo/MONGO_CONNECTION_HAS_BEEN_CLOSED', error)))
 
 		/**
 		 *
@@ -103,17 +117,6 @@ class Mongo extends events {
 		 */
 
 		setTimeout(() => this.___connect(), this.___timeout)
-
-	}
-
-	___protocol () {
-
-		/**
-		 *
-		 */
-
-		this.___socket.___protocol = new ___protocol()
-		this.___socket.___protocol.on('message', (message) => this.___onMessage(message))
 
 	}
 
@@ -137,19 +140,14 @@ class Mongo extends events {
 			 */
 
 			this.___connected = true
+
+			/**
+			 *
+			 */
+
 			process.nextTick(() => this.emit('ready', error))
 
 		}
-
-	}
-
-	___onError (error) {
-
-		/**
-		 *
-		 */
-
-		this.___reconnect(error)
 
 	}
 
@@ -163,7 +161,29 @@ class Mongo extends events {
 
 	}
 
+	___onError (error) {
+
+		/**
+		 *
+		 */
+
+		process.nextTick(() => this.emit('error', error))
+
+		/**
+		 *
+		 */
+
+		this.___reconnect(error)
+
+	}
+
 	___onEnd (error) {
+
+		/**
+		 *
+		 */
+
+		process.nextTick(() => this.emit('error', error))
 
 		/**
 		 *
@@ -193,58 +213,19 @@ class Mongo extends events {
 
 			return
 
-		} else {
-
-			/**
-			 *
-			 */
-
-			delete this.___callbacks[message.id]
-
 		}
 
 		/**
 		 *
 		 */
 
-		return callback(message.error, message.data) | this.___write()
-
-	}
-
-	___write () {
+		delete this.___callbacks[message.id]
 
 		/**
 		 *
 		 */
 
-		const len = this.___buffers.length
-
-		/**
-		 *
-		 */
-
-		if (!len) {
-
-			/**
-			 *
-			 */
-
-			return
-
-		}
-
-		/**
-		 *
-		 */
-
-		const buffer = Buffer.concat(this.___buffers)
-
-		/**
-		 *
-		 */
-
-		this.___buffers = []
-		this.___socket.write(buffer)
+		callback(message.error, message.data)
 
 	}
 
@@ -314,9 +295,13 @@ class Mongo extends events {
 		 *
 		 */
 
-		this.___buffers.push(buffer)
+		this.___socket.write(buffer)
+
+		/**
+		 *
+		 */
+
 		this.___callbacks[id] = (error, data) => callback(error, data)
-		this.___write()
 
 	}
 
@@ -377,9 +362,13 @@ class Mongo extends events {
 		 *
 		 */
 
-		this.___buffers.push(buffer)
+		this.___socket.write(buffer)
+
+		/**
+		 *
+		 */
+
 		this.___callbacks[id] = (error) => callback(error, message)
-		this.___write()
 
 	}
 
@@ -443,9 +432,13 @@ class Mongo extends events {
 		 *
 		 */
 
-		this.___buffers.push(buffer)
+		this.___socket.write(buffer)
+
+		/**
+		 *
+		 */
+
 		this.___callbacks[id] = (error, data) => callback(error, !error && data && data.ok && data.n || 0)
-		this.___write()
 
 	}
 
@@ -507,9 +500,13 @@ class Mongo extends events {
 		 *
 		 */
 
-		this.___buffers.push(buffer)
+		this.___socket.write(buffer)
+
+		/**
+		 *
+		 */
+
 		this.___callbacks[id] = (error, data) => callback(error, !error && data && data.ok && data.n || 0)
-		this.___write()
 
 	}
 
@@ -570,9 +567,78 @@ class Mongo extends events {
 		 *
 		 */
 
-		this.___buffers.push(buffer)
+		this.___socket.write(buffer)
+
+		/**
+		 *
+		 */
+
 		this.___callbacks[id] = (error, data) => callback(error, !error && data || null)
-		this.___write()
+
+	}
+
+	dropIndex (message, callback) {
+
+		/**
+		 *
+		 */
+
+		if (!this.___connected || this.___reconnecting) {
+
+			/**
+			 *
+			 */
+
+			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+
+		}
+
+		/**
+		 *
+		 */
+
+		const id = this.___id++
+		const db = this.___endpoint.db
+
+		/**
+		 *
+		 */
+
+		const ___message = {}
+		const ___options = {}
+
+		/**
+		 *
+		 */
+
+		___message.dropIndexes = 'x'
+		___message.$db = db
+		___message.index = message
+
+		/**
+		 *
+		 */
+
+		___options.id = id
+		___options.db = db
+
+		/**
+		 *
+		 */
+
+		const buffer = this.___socket.___protocol.write(___message, ___options)
+
+		/**
+		 *
+		 */
+
+		this.___socket.write(buffer)
+
+		/**
+		 *
+		 */
+
+		this.___callbacks[id] = (error, data) => callback(error, !error && data && data.ok || null)
 
 	}
 
@@ -654,9 +720,78 @@ class Mongo extends events {
 		 *
 		 */
 
-		this.___buffers.push(buffer)
+		this.___socket.write(buffer)
+
+		/**
+		 *
+		 */
+
 		this.___callbacks[id] = (error, data) => callback(error, !error && data && data.ok || null)
-		this.___write()
+
+	}
+
+	getIndexes (message, callback) {
+
+		/**
+		 *
+		 */
+
+		if (!this.___connected || this.___reconnecting) {
+
+			/**
+			 *
+			 */
+
+			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+
+		}
+
+		/**
+		 *
+		 */
+
+		const id = this.___id++
+		const db = this.___endpoint.db
+
+		/**
+		 *
+		 */
+
+		const ___message = {}
+		const ___options = {}
+
+		/**
+		 *
+		 */
+
+		___message.listIndexes = 'x'
+		___message.$db = db
+		___message.cursor = {}
+
+		/**
+		 *
+		 */
+
+		___options.id = id
+		___options.db = db
+
+		/**
+		 *
+		 */
+
+		const buffer = this.___socket.___protocol.write(___message, ___options)
+
+		/**
+		 *
+		 */
+
+		this.___socket.write(buffer)
+
+		/**
+		 *
+		 */
+
+		this.___callbacks[id] = (error, data) => callback(error, !error && data && data.filter((index) => index.name !== '_id_').map((index) => index.name) || null)
 
 	}
 

@@ -53,7 +53,7 @@ class Mongo extends events {
 		this.update = util.promisify(this.update)
 		this.remove = util.promisify(this.remove)
 		this.aggregate = util.promisify(this.aggregate)
-		this.dropIndex = util.promisify(this.dropIndex)
+		this.removeIndex = util.promisify(this.removeIndex)
 		this.createIndex = util.promisify(this.createIndex)
 		this.getIndexes = util.promisify(this.getIndexes)
 
@@ -577,7 +577,7 @@ class Mongo extends events {
 
 	}
 
-	dropIndex (message, callback) {
+	removeIndex (message, callback) {
 
 		/**
 		 *

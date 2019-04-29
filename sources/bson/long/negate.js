@@ -20,5 +20,3 @@ module.exports = (long) => {
 	return add(not(long), constants.ONE)
 
 }
-
-

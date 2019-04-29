@@ -34,5 +34,3 @@ module.exports = (buffer, offset) => {
 	throw new Error('Unterminated c-string!')
 
 }
-
-

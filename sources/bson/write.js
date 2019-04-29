@@ -392,5 +392,3 @@ const ___toFlat = (buffers, concated, level) => {
  */
 
 module.exports = (data) => ___write(data)
-
-

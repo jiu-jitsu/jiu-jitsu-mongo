@@ -351,5 +351,3 @@ const ___read = (buffer, offset, type) => {
  */
 
 module.exports = (buffer) => ___read(buffer, 0, Object)
-
-

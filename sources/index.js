@@ -802,5 +802,3 @@ class Mongo extends events {
  */
 
 module.exports = Mongo
-
-

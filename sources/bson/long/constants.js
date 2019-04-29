@@ -37,5 +37,3 @@ exports.TWO_PWR_64 = TWO_PWR_64
 exports.TWO_PWR_63 = TWO_PWR_63
 exports.MIN_VALUE = MIN_VALUE
 exports.MAX_VALUE = MAX_VALUE
-
-

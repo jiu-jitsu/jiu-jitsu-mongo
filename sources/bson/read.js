@@ -47,292 +47,210 @@ const ___read = (buffer, offset, type) => {
 		 */
 
 		if (!type) {
-
-			/**
-			 *
-			 */
-
 			break
+		}
+
+		/**
+		 *
+		 */
+
+		offset++
+
+		/**
+		 *
+		 */
+
+		let long = null
+		let size = null
+
+		/**
+		 *
+		 */
+
+		const key = ___cstring.read(buffer, offset)
+
+		/**
+		 *
+		 */
+
+		offset += Buffer.byteLength(key) + 1
+
+		/**
+		 *
+		 */
+
+		switch (type) {
 
 			/**
 			 *
 			 */
 
-		} else {
+			case types.TYPE_NUMBER:
+
+				/**
+				 *
+				 */
+
+				data[key] = buffer.readDoubleLE(offset)
+				offset += 8
+				break
 
 			/**
 			 *
 			 */
 
-			offset++
+			case types.TYPE_INT32:
+
+				/**
+				 *
+				 */
+
+				data[key] = buffer.readInt32LE(offset)
+				offset += 4
+				break
 
 			/**
 			 *
 			 */
 
-			let long = null
-			let size = null
+			case types.TYPE_INT64:
+
+				/**
+				 *
+				 */
+
+				offset += 8
+				break
 
 			/**
 			 *
 			 */
 
-			const key = ___cstring.read(buffer, offset)
+			case types.TYPE_STRING:
+
+				/**
+				 *
+				 */
+
+				size = buffer.readInt32LE(offset)
+				offset += 4
+				data[key] = buffer.toString('utf8', offset, offset + size - 1)
+				offset += size
+				break
 
 			/**
 			 *
 			 */
 
-			offset += Buffer.byteLength(key) + 1
+			case types.TYPE_OBJECT:
+
+				/**
+				 *
+				 */
+
+				data[key] = ___read(buffer, offset, Object)
+				offset += buffer.readInt32LE(offset)
+				break
 
 			/**
 			 *
 			 */
 
-			switch (type) {
+			case types.TYPE_OID:
 
 				/**
 				 *
 				 */
 
-				case types.TYPE_NUMBER:
+				offset += 12
+				break
 
-					/**
-					 *
-					 */
+			/**
+			 *
+			 */
 
-					data[key] = buffer.readDoubleLE(offset)
-					offset += 8
-
-					/**
-					 *
-					 */
-
-					break
+			case types.TYPE_ARRAY:
 
 				/**
 				 *
 				 */
 
-				case types.TYPE_INT32:
+				data[key] = ___read(buffer, offset, Array)
+				offset += buffer.readInt32LE(offset)
+				break
 
-					/**
-					 *
-					 */
+			/**
+			 *
+			 */
 
-					data[key] = buffer.readInt32LE(offset)
-					offset += 4
-
-					/**
-					 *
-					 */
-
-					break
+			case types.TYPE_BOOLEAN:
 
 				/**
 				 *
 				 */
 
-				case types.TYPE_INT64:
+				data[key] = buffer[offset++] === 1
+				break
 
-					/**
-					 *
-					 */
+			/**
+			 *
+			 */
 
-					offset += 8
-
-					/**
-					 *
-					 */
-
-					break
+			case types.TYPE_DATE:
 
 				/**
 				 *
 				 */
 
-				case types.TYPE_STRING:
+				long = {}
+				long.low = buffer.readInt32LE(offset)
+				long.high = buffer.readInt32LE(offset + 4)
+				data[key] = ___long.toNumber(long)
+				data[key] = new Date(data[key])
+				offset += 8
+				break
 
-					/**
-					 *
-					 */
+			/**
+			 *
+			 */
 
-					size = buffer.readInt32LE(offset)
-					offset += 4
-					data[key] = buffer.toString('utf8', offset, offset + size - 1)
-
-					/**
-					 *
-					 */
-
-					offset += size
-
-					/**
-					 *
-					 */
-
-					break
+			case types.TYPE_TIMESTAMP:
 
 				/**
 				 *
 				 */
 
-				case types.TYPE_OBJECT:
+				long = {}
+				long.low = buffer.readInt32LE(offset)
+				long.high = buffer.readInt32LE(offset + 4)
+				data[key] = ___long.toNumber(long)
+				offset += 8
+				break
 
-					/**
-					 *
-					 */
+			/**
+			 *
+			 */
 
-					data[key] = ___read(buffer, offset, Object)
-					offset += buffer.readInt32LE(offset)
-
-					/**
-					 *
-					 */
-
-					break
+			case types.TYPE_NULL:
 
 				/**
 				 *
 				 */
 
-				case types.TYPE_OID:
+				data[key] = null
+				break
 
-					/**
-					 *
-					 */
+			/**
+			 *
+			 */
 
-					offset += 12
-
-					/**
-					 *
-					 */
-
-					break
+			default:
 
 				/**
 				 *
 				 */
 
-				case types.TYPE_ARRAY:
-
-					/**
-					 *
-					 */
-
-					data[key] = ___read(buffer, offset, Array)
-					offset += buffer.readInt32LE(offset)
-
-					/**
-					 *
-					 */
-
-					break
-
-				/**
-				 *
-				 */
-
-				case types.TYPE_BOOLEAN:
-
-					/**
-					 *
-					 */
-
-					data[key] = buffer[offset++] === 1
-
-					/**
-					 *
-					 */
-
-					break
-
-				/**
-				 *
-				 */
-
-				case types.TYPE_DATE:
-
-					/**
-					 *
-					 */
-
-					long = {}
-					long.low = buffer.readInt32LE(offset)
-					long.high = buffer.readInt32LE(offset + 4)
-
-					/**
-					 *
-					 */
-
-					data[key] = ___long.toNumber(long)
-					data[key] = new Date(data[key])
-					offset += 8
-
-					/**
-					 *
-					 */
-
-					break
-
-				/**
-				 *
-				 */
-
-				case types.TYPE_TIMESTAMP:
-
-					/**
-					 *
-					 */
-
-					long = {}
-					long.low = buffer.readInt32LE(offset)
-					long.high = buffer.readInt32LE(offset + 4)
-
-					/**
-					 *
-					 */
-
-					data[key] = ___long.toNumber(long)
-					offset += 8
-
-					/**
-					 *
-					 */
-
-					break
-
-				/**
-				 *
-				 */
-
-				case types.TYPE_NULL:
-
-					/**
-					 *
-					 */
-
-					data[key] = null
-
-					/**
-					 *
-					 */
-
-					break
-
-				/**
-				 *
-				 */
-
-				default:
-
-					/**
-					 *
-					 */
-
-					throw new Error(`Unknown BSON type: ${type}`)
-
-			}
+				throw new Error(`Unknown BSON type: ${type}`)
 
 		}
 

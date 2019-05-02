@@ -59,6 +59,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	___protocol () {
 
 		/**
@@ -69,6 +73,10 @@ class Mongo extends events {
 		this.___socket.___protocol.on('message', (message) => this.___onMessage(message))
 
 	}
+
+	/**
+	 *
+	 */
 
 	___connect () {
 
@@ -86,6 +94,10 @@ class Mongo extends events {
 			.connect(this.___endpoint)
 
 	}
+
+	/**
+	 *
+	 */
 
 	___reconnect (error) {
 
@@ -120,6 +132,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	___onConnect (error) {
 
 		/**
@@ -151,6 +167,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	___onData (chunk) {
 
 		/**
@@ -160,6 +180,10 @@ class Mongo extends events {
 		this.___socket.___protocol.read(chunk)
 
 	}
+
+	/**
+	 *
+	 */
 
 	___onError (error) {
 
@@ -177,6 +201,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	___onEnd (error) {
 
 		/**
@@ -193,6 +221,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	___onMessage (message) {
 
 		/**
@@ -206,13 +238,7 @@ class Mongo extends events {
 		 */
 
 		if (!callback) {
-
-			/**
-			 *
-			 */
-
 			return
-
 		}
 
 		/**
@@ -229,6 +255,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	find (message, callback) {
 
 		/**
@@ -242,13 +272,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-
-			/**
-			 *
-			 */
-
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
-
 		}
 
 		/**
@@ -305,6 +329,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	insert (message, callback) {
 
 		/**
@@ -312,13 +340,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-
-			/**
-			 *
-			 */
-
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
-
 		}
 
 		/**
@@ -372,6 +394,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	update (message, callback) {
 
 		/**
@@ -379,13 +405,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-
-			/**
-			 *
-			 */
-
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
-
 		}
 
 		/**
@@ -442,6 +462,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	remove (message, callback) {
 
 		/**
@@ -449,13 +473,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-
-			/**
-			 *
-			 */
-
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
-
 		}
 
 		/**
@@ -510,6 +528,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	aggregate (message, callback) {
 
 		/**
@@ -517,13 +539,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-
-			/**
-			 *
-			 */
-
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
-
 		}
 
 		/**
@@ -577,6 +593,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	removeIndex (message, callback) {
 
 		/**
@@ -584,13 +604,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-
-			/**
-			 *
-			 */
-
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
-
 		}
 
 		/**
@@ -642,6 +656,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	createIndex (message, callback) {
 
 		/**
@@ -649,13 +667,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-
-			/**
-			 *
-			 */
-
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
-
 		}
 
 		/**
@@ -730,6 +742,10 @@ class Mongo extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	getIndexes (message, callback) {
 
 		/**
@@ -737,13 +753,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-
-			/**
-			 *
-			 */
-
 			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
-
 		}
 
 		/**

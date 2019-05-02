@@ -228,11 +228,6 @@ const ___toBson = (buffers, key, data, level) => {
 
 			buffer_type = Buffer.alloc(1)
 			buffer_type.writeInt8(data.constructor === Object && types.TYPE_OBJECT || data.constructor === Array && types.TYPE_ARRAY, 0)
-
-			/**
-			 *
-			 */
-
 			buffer_key = ___cstring.write(key)
 
 			/**
@@ -270,13 +265,7 @@ const ___toBson = (buffers, key, data, level) => {
 			 */
 
 			if (!data.hasOwnProperty(key)) {
-
-				/**
-				 *
-				 */
-
 				continue
-
 			}
 
 			/**

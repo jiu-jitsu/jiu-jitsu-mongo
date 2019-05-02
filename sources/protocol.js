@@ -53,6 +53,10 @@ class Protocol extends events {
 
 	}
 
+	/**
+	 *
+	 */
+
 	read (chunk) {
 
 		/**
@@ -60,14 +64,8 @@ class Protocol extends events {
 		 */
 
 		if (chunk) {
-
-			/**
-			 *
-			 */
-
 			this.___read.length += chunk.length
 			this.___read.buffers.push(chunk)
-
 		}
 
 		/**
@@ -75,13 +73,7 @@ class Protocol extends events {
 		 */
 
 		if (!this.___read.buffers[0]) {
-
-			/**
-			 *
-			 */
-
 			return
-
 		}
 
 		/**
@@ -89,13 +81,7 @@ class Protocol extends events {
 		 */
 
 		if (!this.___read.buffers[0].length) {
-
-			/**
-			 *
-			 */
-
 			return
-
 		}
 
 		/**
@@ -109,13 +95,7 @@ class Protocol extends events {
 		 */
 
 		if (this.___read.length < header_length) {
-
-			/**
-			 *
-			 */
-
 			return
-
 		}
 
 		/**
@@ -181,37 +161,11 @@ class Protocol extends events {
 		 */
 
 		if (body.writeErrors) {
-
-			/**
-			 *
-			 */
-
 			message.error = body.writeErrors[0]
-
-			/**
-			 *
-			 */
-
 		} else if (body.errmsg) {
-
-			/**
-			 *
-			 */
-
 			message.error = body
-
-			/**
-			 *
-			 */
-
 		} else {
-
-			/**
-			 *
-			 */
-
 			message.data = body.cursor && body.cursor.firstBatch || body.value || body
-
 		}
 
 		/**
@@ -230,6 +184,10 @@ class Protocol extends events {
 		this.read()
 
 	}
+
+	/**
+	 *
+	 */
 
 	write (message, options) {
 
@@ -295,6 +253,10 @@ class Protocol extends events {
 		return this.___writeZip(buffer, options)
 
 	}
+
+	/**
+	 *
+	 */
 
 	___writeZip (decompressed, options) {
 

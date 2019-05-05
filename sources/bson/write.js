@@ -226,6 +226,12 @@ const ___toBson = (buffers, key, data, level) => {
 			 *
 			 */
 
+			next = []
+
+			/**
+			 *
+			 */
+
 			buffer_type = Buffer.alloc(1)
 			buffer_type.writeInt8(data.constructor === Object && types.TYPE_OBJECT || data.constructor === Array && types.TYPE_ARRAY, 0)
 			buffer_key = ___cstring.write(key)
@@ -236,20 +242,6 @@ const ___toBson = (buffers, key, data, level) => {
 
 			buffers.push(buffer_type)
 			buffers.push(buffer_key)
-
-		}
-
-		/**
-		 *
-		 */
-
-		if (buffers[0]) {
-
-			/**
-			 *
-			 */
-
-			next = []
 			buffers.push(next)
 
 		}
@@ -291,6 +283,10 @@ const ___toBson = (buffers, key, data, level) => {
 		/**
 		 *
 		 */
+
+		if (typeof data === 'object') {
+			return ___toBson(buffers, key, Object.assign({}, data), level)
+		}
 
 	}
 

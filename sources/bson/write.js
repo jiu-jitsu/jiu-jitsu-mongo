@@ -3,14 +3,14 @@
  *
  */
 
-const types = require('./types')
+const types = require(`./types`)
 
 /**
  *
  */
 
-const ___long = require('./long')
-const ___cstring = require('./cstring')
+const ___long = require(`./long`)
+const ___cstring = require(`./cstring`)
 
 /**
  * based on http://bsonspec.org/#/specification
@@ -50,7 +50,7 @@ const ___toBson = (buffers, key, data, level) => {
 	 *
 	 */
 
-	key += ''
+	key += ``
 
 	/**
 	 *
@@ -284,7 +284,7 @@ const ___toBson = (buffers, key, data, level) => {
 		 *
 		 */
 
-		if (typeof data === 'object') {
+		if (typeof data === `object`) {
 			return ___toBson(buffers, key, Object.assign({}, data), level)
 		}
 

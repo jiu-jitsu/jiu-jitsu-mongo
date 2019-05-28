@@ -1,3 +1,3 @@
 
-exports.toNumber = require('./toNumber')
-exports.fromNumber = require('./fromNumber')
+exports.toNumber = require(`./toNumber`)
+exports.fromNumber = require(`./fromNumber`)

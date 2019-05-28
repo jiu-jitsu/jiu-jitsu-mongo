@@ -3,8 +3,8 @@
  *
  */
 
-const constants = require('./constants')
-const getLowBitsUnsigned = require('./getLowBitsUnsigned')
+const constants = require(`./constants`)
+const getLowBitsUnsigned = require(`./getLowBitsUnsigned`)
 
 /**
  *

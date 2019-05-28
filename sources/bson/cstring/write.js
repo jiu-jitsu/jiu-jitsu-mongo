@@ -15,7 +15,7 @@ module.exports = (value) => {
 	 *
 	 */
 
-	buffer.write(value, 0, 'utf8')
+	buffer.write(value, 0, `utf8`)
 
 	/**
 	 *

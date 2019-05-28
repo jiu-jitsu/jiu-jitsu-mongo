@@ -3,9 +3,9 @@
  *
  */
 
-const add = require('./add')
-const not = require('./not')
-const constants = require('./constants')
+const add = require(`./add`)
+const not = require(`./not`)
+const constants = require(`./constants`)
 
 /**
  *

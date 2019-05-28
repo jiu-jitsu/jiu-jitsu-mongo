@@ -3,16 +3,21 @@
  *
  */
 
-const net = require('net')
-const util = require('util')
-const events = require('events')
+const net = require(`net`)
+const util = require(`util`)
+const events = require(`events`)
 
 /**
  *
  */
 
-const ___error = require('./error')
-const ___protocol = require('./protocol')
+const ___error = require(`jiu-jitsu-error`)
+
+/**
+ *
+ */
+
+const ___protocol = require(`./protocol`)
 
 /**
  *
@@ -70,7 +75,7 @@ class Mongo extends events {
 		 */
 
 		this.___socket.___protocol = new ___protocol()
-		this.___socket.___protocol.on('message', (message) => this.___onMessage(message))
+		this.___socket.___protocol.on(`message`, (message) => this.___onMessage(message))
 
 	}
 
@@ -87,10 +92,10 @@ class Mongo extends events {
 		this.___socket = new net.Socket()
 		this.___socket
 
-			.on('connect', (error) => this.___onConnect(error))
-			.on('error', (error) => this.___onError(error))
-			.on('data', (data) => this.___onData(data))
-			.on('end', (error) => this.___onEnd(error))
+			.on(`connect`, (error) => this.___onConnect(error))
+			.on(`error`, (error) => this.___onError(error))
+			.on(`data`, (data) => this.___onData(data))
+			.on(`end`, (error) => this.___onEnd(error))
 			.connect(this.___endpoint)
 
 	}
@@ -113,7 +118,7 @@ class Mongo extends events {
 
 		ids.forEach((id) =>
 			this.___callbacks[id] &&
-			this.___callbacks[id](___error('jiu-jitsu-mongo/MONGO_CONNECTION_HAS_BEEN_CLOSED', error)))
+			this.___callbacks[id](___error(`jiu-jitsu-mongo/MONGO_CONNECTION_HAS_BEEN_CLOSED`)))
 
 		/**
 		 *
@@ -161,7 +166,7 @@ class Mongo extends events {
 			 *
 			 */
 
-			process.nextTick(() => this.emit('ready', error))
+			process.nextTick(() => this.emit(`ready`, error))
 
 		}
 
@@ -191,7 +196,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		process.nextTick(() => this.emit('error', error))
+		process.nextTick(() => this.emit(`error`, error))
 
 		/**
 		 *
@@ -211,7 +216,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		process.nextTick(() => this.emit('error', error))
+		process.nextTick(() => this.emit(`error`, error))
 
 		/**
 		 *
@@ -272,7 +277,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`))
 		}
 
 		/**
@@ -293,7 +298,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.find = 'x'
+		___message.find = `x`
 		___message.$db = db
 		___message.filter = message.filter || {}
 		___message.sort = message.sort || {}
@@ -340,7 +345,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`))
 		}
 
 		/**
@@ -361,7 +366,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.insert = 'x'
+		___message.insert = `x`
 		___message.$db = db
 		___message.documents = []
 		___message.documents.push(message)
@@ -405,7 +410,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`))
 		}
 
 		/**
@@ -426,7 +431,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.update = 'x'
+		___message.update = `x`
 		___message.$db = db
 		___message.updates = []
 		___message.updates[0] = {}
@@ -473,7 +478,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`))
 		}
 
 		/**
@@ -494,7 +499,7 @@ class Mongo extends events {
 		 * limit - specify either a 0 to delete all matching documents, or 1 to delete a single document
 		 */
 
-		___message.delete = 'x'
+		___message.delete = `x`
 		___message.$db = db
 		___message.deletes = []
 		___message.deletes[0] = {}
@@ -539,7 +544,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`))
 		}
 
 		/**
@@ -560,7 +565,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.aggregate = 'x'
+		___message.aggregate = `x`
 		___message.$db = db
 		___message.pipeline = message.pipeline
 		___message.cursor = {}
@@ -604,7 +609,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`))
 		}
 
 		/**
@@ -625,7 +630,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.dropIndexes = 'x'
+		___message.dropIndexes = `x`
 		___message.$db = db
 		___message.index = message
 
@@ -667,7 +672,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`))
 		}
 
 		/**
@@ -700,13 +705,13 @@ class Mongo extends events {
 		 *
 		 */
 
-		const indexName = `${!message.options.unique && 'ix' || 'ux'}@${fields.join('|')}`
+		const indexName = `${!message.options.unique && `ix` || `ux`}@${fields.join(`|`)}`
 
 		/**
 		 *
 		 */
 
-		___message.createIndexes = 'x'
+		___message.createIndexes = `x`
 		___message.$db = db
 		___message.indexes = []
 		___message.indexes[0] = {}
@@ -753,7 +758,7 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error('jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY'))
+			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`))
 		}
 
 		/**
@@ -774,7 +779,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.listIndexes = 'x'
+		___message.listIndexes = `x`
 		___message.$db = db
 		___message.cursor = {}
 
@@ -801,7 +806,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		this.___callbacks[id] = (error, data) => callback(error, !error && data && data.filter((index) => index.name !== '_id_').map((index) => index.name) || null)
+		this.___callbacks[id] = (error, data) => callback(error, !error && data && data.filter((index) => index.name !== `_id_`).map((index) => index.name) || null)
 
 	}
 

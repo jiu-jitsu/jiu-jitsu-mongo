@@ -1,6 +1,6 @@
 
 /**
- *
+ * write c string
  */
 
 module.exports = (value) => {

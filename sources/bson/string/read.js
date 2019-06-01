@@ -1,6 +1,6 @@
 
 /**
- *
+ * read c string
  */
 
 module.exports = (buffer, offset) => {

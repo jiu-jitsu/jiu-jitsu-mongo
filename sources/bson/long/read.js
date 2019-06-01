@@ -4,7 +4,7 @@
  */
 
 const constants = require(`./constants`)
-const getLowBitsUnsigned = require(`./getLowBitsUnsigned`)
+const getLowBitsUnsigned = require(`./get-low-bits-unsigned`)
 
 /**
  *

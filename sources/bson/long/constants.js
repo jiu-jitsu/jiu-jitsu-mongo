@@ -3,8 +3,8 @@
  *
  */
 
-const fromInt = require(`./fromInt`)
-const fromBits = require(`./fromBits`)
+const fromInt = require(`./from-int`)
+const fromBits = require(`./from-bits`)
 
 /**
  *

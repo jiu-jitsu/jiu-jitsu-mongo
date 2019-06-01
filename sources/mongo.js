@@ -118,13 +118,12 @@ class Mongo extends events {
 
 		ids.forEach((id) =>
 			this.___callbacks[id] &&
-			this.___callbacks[id](___error(`jiu-jitsu-mongo/MONGO_CONNECTION_HAS_BEEN_CLOSED`)))
+			this.___callbacks[id](___error(`jiu-jitsu-mongo/MONGO_CONNECTION_HAS_BEEN_CLOSED`, error)))
 
 		/**
 		 *
 		 */
 
-		this.___buffers = []
 		this.___callbacks = {}
 		this.___reconnecting = true
 		this.___socket.___protocol.flush()

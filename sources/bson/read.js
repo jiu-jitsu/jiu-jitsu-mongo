@@ -9,8 +9,8 @@ const types = require(`./types`)
  *
  */
 
-const ___long = require(`./long`)
-const ___cstring = require(`./cstring`)
+const ___longRead = require(`./long/read`)
+const ___stringRead = require(`./string/read`)
 
 /**
  * based on http://bsonspec.org/#/specification
@@ -67,7 +67,7 @@ const ___read = (buffer, offset, type) => {
 		 *
 		 */
 
-		const key = ___cstring.read(buffer, offset)
+		const key = ___stringRead(buffer, offset)
 
 		/**
 		 *
@@ -205,7 +205,7 @@ const ___read = (buffer, offset, type) => {
 				long = {}
 				long.low = buffer.readInt32LE(offset)
 				long.high = buffer.readInt32LE(offset + 4)
-				data[key] = ___long.toNumber(long)
+				data[key] = ___longRead(long)
 				data[key] = new Date(data[key])
 				offset += 8
 				break
@@ -223,7 +223,7 @@ const ___read = (buffer, offset, type) => {
 				long = {}
 				long.low = buffer.readInt32LE(offset)
 				long.high = buffer.readInt32LE(offset + 4)
-				data[key] = ___long.toNumber(long)
+				data[key] = ___longRead(long)
 				offset += 8
 				break
 

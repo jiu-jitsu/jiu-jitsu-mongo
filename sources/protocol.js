@@ -10,7 +10,8 @@ const events = require(`events`)
  *
  */
 
-const ___bson = require(`./bson`)
+const ___bsonRead = require(`./bson/read`)
+const ___bsonWrite = require(`./bson/write`)
 
 /**
  *
@@ -138,7 +139,7 @@ class Protocol extends events {
 		 *
 		 */
 
-		const body = ___bson.read(decompressed.slice(5))
+		const body = ___bsonRead(decompressed.slice(5))
 
 		/**
 		 *
@@ -195,7 +196,7 @@ class Protocol extends events {
 		 * Bson
 		 */
 
-		const buffer_message = ___bson.write(message)
+		const buffer_message = ___bsonWrite(message)
 
 		/**
 		 * Uncompressed

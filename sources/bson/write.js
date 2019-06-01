@@ -9,8 +9,8 @@ const types = require(`./types`)
  *
  */
 
-const ___long = require(`./long`)
-const ___cstring = require(`./cstring`)
+const ___longWrite = require(`./long/write`)
+const ___stringWrite = require(`./string/write`)
 
 /**
  * based on http://bsonspec.org/#/specification
@@ -73,7 +73,7 @@ const ___toBson = (buffers, key, data, level) => {
 
 		buffer_type = Buffer.alloc(1)
 		buffer_type.writeInt8(types.TYPE_NULL, 0)
-		buffer_key = ___cstring.write(key)
+		buffer_key = ___stringWrite(key)
 
 		/**
 		 *
@@ -92,7 +92,7 @@ const ___toBson = (buffers, key, data, level) => {
 		 *
 		 */
 
-		const long = ___long.fromNumber(data.getTime())
+		const long = ___longWrite(data.getTime())
 
 		/**
 		 *
@@ -100,7 +100,7 @@ const ___toBson = (buffers, key, data, level) => {
 
 		buffer_type = Buffer.alloc(1)
 		buffer_type.writeInt8(types.TYPE_DATE, 0)
-		buffer_key = ___cstring.write(key)
+		buffer_key = ___stringWrite(key)
 		buffer_data = Buffer.alloc(8)
 		buffer_data.writeInt32LE(long.low, 0)
 		buffer_data.writeInt32LE(long.high, 4)
@@ -125,7 +125,7 @@ const ___toBson = (buffers, key, data, level) => {
 
 		buffer_type = Buffer.alloc(1)
 		buffer_type.writeInt8(types.TYPE_BOOLEAN, 0)
-		buffer_key = ___cstring.write(key)
+		buffer_key = ___stringWrite(key)
 		buffer_data = Buffer.alloc(1)
 		buffer_data.writeInt8(data ? 1 : 0, 0)
 
@@ -148,7 +148,7 @@ const ___toBson = (buffers, key, data, level) => {
 		 */
 
 		buffer_type = Buffer.alloc(1)
-		buffer_key = ___cstring.write(key)
+		buffer_key = ___stringWrite(key)
 
 		/**
 		 *
@@ -190,8 +190,8 @@ const ___toBson = (buffers, key, data, level) => {
 
 		buffer_type = Buffer.alloc(1)
 		buffer_type.writeInt8(types.TYPE_STRING, 0)
-		buffer_key = ___cstring.write(key)
-		buffer_data = ___cstring.write(data)
+		buffer_key = ___stringWrite(key)
+		buffer_data = ___stringWrite(data)
 		buffer_data_size = Buffer.alloc(4)
 		buffer_data_size.writeInt32LE(buffer_data.length, 0)
 
@@ -234,7 +234,7 @@ const ___toBson = (buffers, key, data, level) => {
 
 			buffer_type = Buffer.alloc(1)
 			buffer_type.writeInt8(data.constructor === Object && types.TYPE_OBJECT || data.constructor === Array && types.TYPE_ARRAY, 0)
-			buffer_key = ___cstring.write(key)
+			buffer_key = ___stringWrite(key)
 
 			/**
 			 *
@@ -296,7 +296,7 @@ const ___toBson = (buffers, key, data, level) => {
  *
  */
 
-const ___toFlat = (buffers, concated, level) => {
+const ___toFlat = (buffers, concats, level) => {
 
 	/**
 	 *
@@ -316,7 +316,7 @@ const ___toFlat = (buffers, concated, level) => {
 	 *
 	 */
 
-	concated.push(buffer)
+	concats.push(buffer)
 
 	/**
 	 *
@@ -340,7 +340,7 @@ const ___toFlat = (buffers, concated, level) => {
 			 *
 			 */
 
-			concated.push(buffers[i])
+			concats.push(buffers[i])
 
 			/**
 			 *
@@ -352,7 +352,7 @@ const ___toFlat = (buffers, concated, level) => {
 			 *
 			 */
 
-			size += ___toFlat(buffers[i], concated, 1)
+			size += ___toFlat(buffers[i], concats, 1)
 
 		}
 

@@ -297,7 +297,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.find = `x`
+		___message.find = `table`
 		___message.$db = db
 		___message.filter = message.filter || {}
 		___message.sort = message.sort || {}
@@ -365,7 +365,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.insert = `x`
+		___message.insert = `table`
 		___message.$db = db
 		___message.documents = []
 		___message.documents.push(message)
@@ -430,7 +430,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.update = `x`
+		___message.update = `table`
 		___message.$db = db
 		___message.updates = []
 		___message.updates[0] = {}
@@ -498,7 +498,7 @@ class Mongo extends events {
 		 * limit - specify either a 0 to delete all matching documents, or 1 to delete a single document
 		 */
 
-		___message.delete = `x`
+		___message.delete = `table`
 		___message.$db = db
 		___message.deletes = []
 		___message.deletes[0] = {}
@@ -564,7 +564,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.aggregate = `x`
+		___message.aggregate = `table`
 		___message.$db = db
 		___message.pipeline = message.pipeline
 		___message.cursor = {}
@@ -629,7 +629,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.dropIndexes = `x`
+		___message.dropIndexes = `table`
 		___message.$db = db
 		___message.index = message
 
@@ -710,7 +710,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.createIndexes = `x`
+		___message.createIndexes = `table`
 		___message.$db = db
 		___message.indexes = []
 		___message.indexes[0] = {}
@@ -778,7 +778,7 @@ class Mongo extends events {
 		 *
 		 */
 
-		___message.listIndexes = `x`
+		___message.listIndexes = `table`
 		___message.$db = db
 		___message.cursor = {}
 

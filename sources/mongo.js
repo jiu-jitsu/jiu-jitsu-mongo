@@ -116,9 +116,11 @@ class Mongo extends events {
 		 *
 		 */
 
-		ids.forEach((id) =>
+		ids.forEach((id) => {
+			const error = ___error(null, `jiu-jitsu-mongo`, `FAIL`, `MONGO_CONNECTION_HAS_BEEN_CLOSED`, error)
 			this.___callbacks[id] &&
-			this.___callbacks[id](___error(`jiu-jitsu-mongo/MONGO_CONNECTION_HAS_BEEN_CLOSED`, `FAIL`, error)))
+			this.___callbacks[id](error)
+		})
 
 		/**
 		 *
@@ -276,7 +278,8 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`, `FAIL`))
+			const error = ___error(null, `jiu-jitsu-mongo`, `FAIL`, `MONGO_SOCKET_IS_NOT_READY`)
+			return callback(error)
 		}
 
 		/**
@@ -344,7 +347,8 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`, `FAIL`))
+			const error = ___error(null, `jiu-jitsu-mongo`, `FAIL`, `MONGO_SOCKET_IS_NOT_READY`)
+			return callback(error)
 		}
 
 		/**
@@ -409,7 +413,8 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`, `FAIL`))
+			const error = ___error(null, `jiu-jitsu-mongo`, `FAIL`, `MONGO_SOCKET_IS_NOT_READY`)
+			return callback(error)
 		}
 
 		/**
@@ -477,7 +482,8 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`, `FAIL`))
+			const error = ___error(null, `jiu-jitsu-mongo`, `FAIL`, `MONGO_SOCKET_IS_NOT_READY`)
+			return callback(error)
 		}
 
 		/**
@@ -543,7 +549,8 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`, `FAIL`))
+			const error = ___error(null, `jiu-jitsu-mongo`, `FAIL`, `MONGO_SOCKET_IS_NOT_READY`)
+			return callback(error)
 		}
 
 		/**
@@ -608,7 +615,8 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`, `FAIL`))
+			const error = ___error(null, `jiu-jitsu-mongo`, `FAIL`, `MONGO_SOCKET_IS_NOT_READY`)
+			return callback(error)
 		}
 
 		/**
@@ -671,7 +679,8 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`, `FAIL`))
+			const error = ___error(null, `jiu-jitsu-mongo`, `FAIL`, `MONGO_SOCKET_IS_NOT_READY`)
+			return callback(error)
 		}
 
 		/**
@@ -757,7 +766,8 @@ class Mongo extends events {
 		 */
 
 		if (!this.___connected || this.___reconnecting) {
-			return callback(___error(`jiu-jitsu-mongo/MONGO_SOCKET_IS_NOT_READY`, `FAIL`))
+			const error = ___error(null, `jiu-jitsu-mongo`, `FAIL`, `MONGO_SOCKET_IS_NOT_READY`)
+			return callback(error)
 		}
 
 		/**

@@ -94,9 +94,9 @@ class Mongo {
 		const promise = this.___promises[message.id]
 		const resolve = promise && promise[0]
 		const reject = promise && promise[1]
-		message.error && reject && reject(message.error)
-		message.data && resolve && resolve(message.data)
 		delete this.___promises[message.id]
+		message.error && reject && reject(message.error)
+		!message.error && resolve && resolve(message.data)
 	}
 
 	/**

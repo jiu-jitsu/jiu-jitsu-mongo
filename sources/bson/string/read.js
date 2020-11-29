@@ -11,7 +11,7 @@ module.exports = (buffer, offset) => {
 
 	for (let i = offset; i < buffer.length; i++) {
 		if (buffer[i] === 0) {
-			return buffer.toString(`utf8`, offset, i)
+			return buffer.toString("utf8", offset, i)
 		}
 	}
 
@@ -19,6 +19,6 @@ module.exports = (buffer, offset) => {
 	 *
 	 */
 
-	throw new Error(`Unterminated c-string!`)
+	throw new Error("Unterminated c-string!")
 
 }

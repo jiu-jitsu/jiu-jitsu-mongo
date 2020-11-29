@@ -3,19 +3,19 @@
  *
  */
 
-const net = require(`net`)
+const net = require("net")
 
 /**
  *
  */
 
-const ___log = require(`jiu-jitsu-log`)
+const ___log = require("jiu-jitsu-log")
 
 /**
  *
  */
 
-const ___protocol = require(`./protocol`)
+const ___protocol = require("./protocol")
 
 /**
  *
@@ -40,21 +40,21 @@ class Mongo {
 	 */
 
 	async connect () {
-		await new Promise((resolve) => this.___connect(resolve))
+		await new Promise(async (resolve) => await this.___connect(resolve))
 	}
 
 	/**
 	 *
 	 */
 
-	___connect (resolve) {
+	async ___connect (resolve) {
 		const options = this.___options
 		this.___socket = new net.Socket()
 		this.___protocol = new ___protocol()
-		this.___protocol.on(`message`, (message) => this.___onProtocolMessage(message))
-		this.___socket.on(`connect`, (error) => this.___onSocketConnect(error, resolve))
-		this.___socket.on(`error`, (error) => this.___onSocketError(error))
-		this.___socket.on(`data`, (data) => this.___onSocketData(data))
+		this.___protocol.on("message", async (message) => await this.___onProtocolMessage(message))
+		this.___socket.on("connect", async (error) => await this.___onSocketConnect(error, resolve))
+		this.___socket.on("error", async (error) => await this.___onSocketError(error))
+		this.___socket.on("data", async (data) => await this.___onSocketData(data))
 		this.___socket.connect(options)
 	}
 
@@ -62,9 +62,9 @@ class Mongo {
 	 *
 	 */
 
-	___onSocketConnect (error, resolve) {
+	async ___onSocketConnect (error, resolve) {
 		const options = this.___options
-		___log(`jiu-jitsu-mongo`, `OK`, `${options.db} ✔`)
+		await ___log("jiu-jitsu-mongo", "OK", `${options.db} ✔`)
 		resolve(error)
 	}
 
@@ -72,9 +72,9 @@ class Mongo {
 	 *
 	 */
 
-	___onSocketError (error) {
+	async ___onSocketError (error) {
 		const options = this.___options
-		___log(`jiu-jitsu-mongo`, `FAIL`, `${options.db} !`, error, true)
+		await ___log("jiu-jitsu-mongo", "FAIL", `${options.db} !`, error, true)
 		process.exit(1)
 	}
 
@@ -82,7 +82,7 @@ class Mongo {
 	 *
 	 */
 
-	___onSocketData (data) {
+	async ___onSocketData (data) {
 		this.___protocol.read(data)
 	}
 
@@ -90,7 +90,7 @@ class Mongo {
 	 *
 	 */
 
-	___onProtocolMessage (message) {
+	async ___onProtocolMessage (message) {
 		const promise = this.___promises[message.id]
 		const resolve = promise && promise[0]
 		const reject = promise && promise[1]
@@ -109,7 +109,7 @@ class Mongo {
 			const db = this.___options.db
 			const ___message = {}
 			const ___options = {}
-			___message.find = `table`
+			___message.find = "table"
 			___message.$db = db
 			___message.filter = message.filter || {}
 			___message.sort = message.sort || {}
@@ -135,7 +135,7 @@ class Mongo {
 			const db = this.___options.db
 			const ___message = {}
 			const ___options = {}
-			___message.insert = `table`
+			___message.insert = "table"
 			___message.$db = db
 			___message.documents = []
 			___message.documents.push(message)
@@ -158,7 +158,7 @@ class Mongo {
 			const db = this.___options.db
 			const ___message = {}
 			const ___options = {}
-			___message.update = `table`
+			___message.update = "table"
 			___message.$db = db
 			___message.updates = []
 			___message.updates[0] = {}
@@ -184,7 +184,7 @@ class Mongo {
 			const db = this.___options.db
 			const ___message = {}
 			const ___options = {}
-			___message.delete = `table`
+			___message.delete = "table"
 			___message.$db = db
 			___message.deletes = []
 			___message.deletes[0] = {}
@@ -211,7 +211,7 @@ class Mongo {
 			const db = this.___options.db
 			const ___message = {}
 			const ___options = {}
-			___message.aggregate = `table`
+			___message.aggregate = "table"
 			___message.$db = db
 			___message.pipeline = message.pipeline
 			___message.cursor = {}
@@ -229,13 +229,13 @@ class Mongo {
 	 */
 
 	async removeIndex (index) {
-		if (index.name === `_id_`) return
+		if (index.name === "_id_") return
 		return await new Promise((resolve, reject) => {
 			const id = this.___id++
 			const db = this.___options.db
 			const ___message = {}
 			const ___options = {}
-			___message.dropIndexes = `table`
+			___message.dropIndexes = "table"
 			___message.$db = db
 			___message.index = index.name
 			___options.id = id
@@ -258,8 +258,8 @@ class Mongo {
 			const ___options = {}
 			const fields = Object.keys(index.keys)
 			const indexKey = index.keys
-			const indexName = `${!index.options.unique && `ix` || `ux`}@${fields.join(`|`)}`
-			___message.createIndexes = `table`
+			const indexName = `${!index.options.unique && "ix" || "ux"}@${fields.join("|")}`
+			___message.createIndexes = "table"
 			___message.$db = db
 			___message.indexes = []
 			___message.indexes[0] = {}
@@ -285,7 +285,7 @@ class Mongo {
 			const db = this.___options.db
 			const ___message = {}
 			const ___options = {}
-			___message.listIndexes = `table`
+			___message.listIndexes = "table"
 			___message.$db = db
 			___message.cursor = {}
 			___options.id = id

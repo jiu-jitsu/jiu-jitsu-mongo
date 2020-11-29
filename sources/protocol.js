@@ -3,15 +3,15 @@
  *
  */
 
-const zlib = require(`zlib`)
-const events = require(`events`)
+const zlib = require("zlib")
+const events = require("events")
 
 /**
  *
  */
 
-const ___bsonRead = require(`./bson/read`)
-const ___bsonWrite = require(`./bson/write`)
+const ___bsonRead = require("./bson/read")
+const ___bsonWrite = require("./bson/write")
 
 /**
  *
@@ -181,7 +181,7 @@ class Protocol extends events {
 		 *
 		 */
 
-		this.emit(`message`, message)
+		this.emit("message", message)
 		this.read()
 
 	}

@@ -3,4 +3,4 @@
  *
  */
 
-module.exports = require(`./sources/mongo`)
+module.exports = require("./sources/mongo")

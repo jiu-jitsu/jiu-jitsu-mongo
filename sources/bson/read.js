@@ -3,14 +3,14 @@
  *
  */
 
-const types = require(`./types`)
+const types = require("./types")
 
 /**
  *
  */
 
-const ___longRead = require(`./long/read`)
-const ___stringRead = require(`./string/read`)
+const ___longRead = require("./long/read")
+const ___stringRead = require("./string/read")
 
 /**
  * based on http://bsonspec.org/#/specification
@@ -134,7 +134,7 @@ const ___read = (buffer, offset, type) => {
 
 				size = buffer.readInt32LE(offset)
 				offset += 4
-				data[key] = buffer.toString(`utf8`, offset, offset + size - 1)
+				data[key] = buffer.toString("utf8", offset, offset + size - 1)
 				offset += size
 				break
 

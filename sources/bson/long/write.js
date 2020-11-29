@@ -3,8 +3,8 @@
  *
  */
 
-const negate = require(`./negate`)
-const constants = require(`./constants`)
+const negate = require("./negate")
+const constants = require("./constants")
 
 /**
  *

@@ -3,14 +3,14 @@
  *
  */
 
-const types = require(`./types`)
+const types = require("./types")
 
 /**
  *
  */
 
-const ___longWrite = require(`./long/write`)
-const ___stringWrite = require(`./string/write`)
+const ___longWrite = require("./long/write")
+const ___stringWrite = require("./string/write")
 
 /**
  * based on http://bsonspec.org/#/specification
@@ -44,13 +44,13 @@ const ___write = (data) => {
  *
  */
 
-const ___toBson = (buffers, key, data, level) => {
+const ___toBson = (buffers, key, data, deep) => {
 
 	/**
 	 *
 	 */
 
-	key += ``
+	key += ""
 
 	/**
 	 *
@@ -176,7 +176,7 @@ const ___toBson = (buffers, key, data, level) => {
 		 *
 		 */
 
-		return ___toBson(buffers, key, new Date(data), level)
+		return ___toBson(buffers, key, new Date(data), deep)
 
 		/**
 		 *
@@ -214,27 +214,24 @@ const ___toBson = (buffers, key, data, level) => {
 		 *
 		 */
 
-		let next = null
+		const next = []
 
 		/**
 		 *
 		 */
 
-		if (level) {
+		if (deep) {
 
 			/**
 			 *
 			 */
 
-			next = []
-
-			/**
-			 *
-			 */
-
-			buffer_type = Buffer.alloc(1)
-			buffer_type.writeInt8(data.constructor === Object && types.TYPE_OBJECT || data.constructor === Array && types.TYPE_ARRAY, 0)
 			buffer_key = ___stringWrite(key)
+			buffer_type = Buffer.alloc(1)
+			buffer_type.writeInt8(
+				data.constructor === Object && types.TYPE_OBJECT ||
+				data.constructor === Array && types.TYPE_ARRAY, 0
+			)
 
 			/**
 			 *
@@ -264,7 +261,7 @@ const ___toBson = (buffers, key, data, level) => {
 			 *
 			 */
 
-			___toBson(next || buffers, key, data[key], 1)
+			___toBson(deep && next || buffers, key, data[key], 1)
 
 		}
 
@@ -284,8 +281,8 @@ const ___toBson = (buffers, key, data, level) => {
 		 *
 		 */
 
-		if (typeof data === `object`) {
-			return ___toBson(buffers, key, Object.assign({}, data), level)
+		if (typeof data === "object") {
+			return ___toBson(buffers, key, Object.assign({}, data), deep)
 		}
 
 	}
@@ -296,7 +293,7 @@ const ___toBson = (buffers, key, data, level) => {
  *
  */
 
-const ___toFlat = (buffers, concats, level) => {
+const ___toFlat = (buffers, concats, deep) => {
 
 	/**
 	 *
@@ -323,37 +320,11 @@ const ___toFlat = (buffers, concats, level) => {
 	 */
 
 	for (i = 0; i < buffers.length; i++) {
-
-		/**
-		 *
-		 */
-
 		if (Buffer.isBuffer(buffers[i])) {
-
-			/**
-			 *
-			 */
-
 			size += buffers[i].length
-
-			/**
-			 *
-			 */
-
 			concats.push(buffers[i])
-
-			/**
-			 *
-			 */
-
 		} else {
-
-			/**
-			 *
-			 */
-
 			size += ___toFlat(buffers[i], concats, 1)
-
 		}
 
 	}
@@ -362,7 +333,7 @@ const ___toFlat = (buffers, concats, level) => {
 	 * + next 0x00
 	 */
 
-	buffer.writeInt32LE(size + level, 0)
+	buffer.writeInt32LE(size + deep, 0)
 
 	/**
 	 *

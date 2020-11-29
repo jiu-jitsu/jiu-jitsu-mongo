@@ -83,7 +83,7 @@ class Mongo {
 	 */
 
 	async ___onSocketData (data) {
-		this.___protocol.read(data)
+		await this.___protocol.read(data)
 	}
 
 	/**
@@ -104,7 +104,7 @@ class Mongo {
 	 */
 
 	async find (message = {}) {
-		return await new Promise((resolve, reject) => {
+		return await new Promise(async (resolve, reject) => {
 			const id = this.___id++
 			const db = this.___options.db
 			const ___message = {}
@@ -119,7 +119,7 @@ class Mongo {
 			___message.projection._id = 0
 			___options.id = id
 			___options.db = db
-			const buffer = this.___protocol.write(___message, ___options)
+			const buffer = await this.___protocol.write(___message, ___options)
 			this.___promises[id] = [resolve, reject]
 			this.___socket.write(buffer)
 		})
@@ -130,7 +130,7 @@ class Mongo {
 	 */
 
 	async insert (message = {}) {
-		return await new Promise((resolve, reject) => {
+		return await new Promise(async (resolve, reject) => {
 			const id = this.___id++
 			const db = this.___options.db
 			const ___message = {}
@@ -142,7 +142,7 @@ class Mongo {
 			___message.ordered = true
 			___options.id = id
 			___options.db = db
-			const buffer = this.___protocol.write(___message, ___options)
+			const buffer = await this.___protocol.write(___message, ___options)
 			this.___promises[id] = [resolve, reject]
 			this.___socket.write(buffer)
 		})
@@ -153,7 +153,7 @@ class Mongo {
 	 */
 
 	async update (message = {}) {
-		return await new Promise((resolve, reject) => {
+		return await new Promise(async (resolve, reject) => {
 			const id = this.___id++
 			const db = this.___options.db
 			const ___message = {}
@@ -168,7 +168,7 @@ class Mongo {
 			___message.updates[0].upsert = !!message.upsert || false
 			___options.id = id
 			___options.db = db
-			const buffer = this.___protocol.write(___message, ___options)
+			const buffer = await this.___protocol.write(___message, ___options)
 			this.___promises[id] = [resolve, reject]
 			this.___socket.write(buffer)
 		})
@@ -179,7 +179,7 @@ class Mongo {
 	 */
 
 	async remove (message = {}) {
-		return await new Promise((resolve, reject) => {
+		return await new Promise(async (resolve, reject) => {
 			const id = this.___id++
 			const db = this.___options.db
 			const ___message = {}
@@ -195,7 +195,7 @@ class Mongo {
 			___message.deletes[0].limit = !message.multi && 1 || 0
 			___options.id = id
 			___options.db = db
-			const buffer = this.___protocol.write(___message, ___options)
+			const buffer = await this.___protocol.write(___message, ___options)
 			this.___promises[id] = [resolve, reject]
 			this.___socket.write(buffer)
 		})
@@ -206,7 +206,7 @@ class Mongo {
 	 */
 
 	async aggregate (message = {}) {
-		return await new Promise((resolve, reject) => {
+		return await new Promise(async (resolve, reject) => {
 			const id = this.___id++
 			const db = this.___options.db
 			const ___message = {}
@@ -218,7 +218,7 @@ class Mongo {
 			___message.cursor.batchSize = message.limit || 999999999
 			___options.id = id
 			___options.db = db
-			const buffer = this.___protocol.write(___message, ___options)
+			const buffer = await this.___protocol.write(___message, ___options)
 			this.___promises[id] = [resolve, reject]
 			this.___socket.write(buffer)
 		})
@@ -230,7 +230,7 @@ class Mongo {
 
 	async removeIndex (index) {
 		if (index.name === "_id_") return
-		return await new Promise((resolve, reject) => {
+		return await new Promise(async (resolve, reject) => {
 			const id = this.___id++
 			const db = this.___options.db
 			const ___message = {}
@@ -240,7 +240,7 @@ class Mongo {
 			___message.index = index.name
 			___options.id = id
 			___options.db = db
-			const buffer = this.___protocol.write(___message, ___options)
+			const buffer = await this.___protocol.write(___message, ___options)
 			this.___promises[id] = [resolve, reject]
 			this.___socket.write(buffer)
 		})
@@ -251,7 +251,7 @@ class Mongo {
 	 */
 
 	async createIndex (index) {
-		return await new Promise((resolve, reject) => {
+		return await new Promise(async (resolve, reject) => {
 			const id = this.___id++
 			const db = this.___options.db
 			const ___message = {}
@@ -269,7 +269,7 @@ class Mongo {
 			___message.indexes[0].background = !!index.options.background
 			___options.id = id
 			___options.db = db
-			const buffer = this.___protocol.write(___message, ___options)
+			const buffer = await this.___protocol.write(___message, ___options)
 			this.___promises[id] = [resolve, reject]
 			this.___socket.write(buffer)
 		})
@@ -280,7 +280,7 @@ class Mongo {
 	 */
 
 	async getIndexes () {
-		return await new Promise((resolve, reject) => {
+		return await new Promise(async (resolve, reject) => {
 			const id = this.___id++
 			const db = this.___options.db
 			const ___message = {}
@@ -290,7 +290,7 @@ class Mongo {
 			___message.cursor = {}
 			___options.id = id
 			___options.db = db
-			const buffer = this.___protocol.write(___message, ___options)
+			const buffer = await this.___protocol.write(___message, ___options)
 			this.___promises[id] = [resolve, reject]
 			this.___socket.write(buffer)
 		})

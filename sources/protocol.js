@@ -3,6 +3,7 @@
  *
  */
 
+const util = require("util")
 const zlib = require("zlib")
 const events = require("events")
 
@@ -134,7 +135,7 @@ class Protocol extends events {
 		 */
 
 		const compressed = next.slice(25)
-		const decompressed = await new Promise((resolve) => zlib.unzip(compressed, resolve))
+		const decompressed = await util.promisify(zlib.unzip)(compressed)
 
 		/**
 		 *
@@ -277,7 +278,7 @@ class Protocol extends events {
 		 * Compress
 		 */
 
-		const compressed = await new Promise((resolve) => zlib.deflate(to_be_compressed, resolve))
+		const compressed = await util.promisify(zlib.deflate)(to_be_compressed)
 
 		/**
 		 * Full compressed buffer

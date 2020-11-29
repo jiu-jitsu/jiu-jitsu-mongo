@@ -58,7 +58,7 @@ class Protocol extends events {
 	 *
 	 */
 
-	read (chunk) {
+	async read (chunk) {
 
 		/**
 		 *
@@ -107,6 +107,7 @@ class Protocol extends events {
 
 		/**
 		 * Parse compressed message
+		 * @type {Buffer} next
 		 */
 
 		const next = this.___read.buffer.slice(0, header_length)
@@ -129,11 +130,11 @@ class Protocol extends events {
 		const compressor_id = next.readUInt8(24)
 
 		/**
-		 *
+		 * @type {Buffer} compressed
 		 */
 
 		const compressed = next.slice(25)
-		const decompressed = zlib.unzipSync(compressed)
+		const decompressed = await new Promise((resolve) => zlib.unzip(compressed, resolve))
 
 		/**
 		 *
@@ -161,12 +162,12 @@ class Protocol extends events {
 		 *
 		 */
 
-		if (body.writeErrors) {
+		if (body.hasOwnProperty("writeErrors")) {
 			message.error = body.writeErrors[0]
-		} else if (body.errmsg) {
+		} else if (body.hasOwnProperty("errmsg")) {
 			message.error = body
 		} else {
-			message.data = body.cursor && body.cursor.firstBatch || body.value || body
+			message.data = body["cursor"] && body["cursor"]["firstBatch"] || body["value"] || body
 		}
 
 		/**
@@ -182,7 +183,12 @@ class Protocol extends events {
 		 */
 
 		this.emit("message", message)
-		this.read()
+
+		/**
+		 *
+		 */
+
+		setTimeout(async () => await this.read())
 
 	}
 
@@ -190,7 +196,7 @@ class Protocol extends events {
 	 *
 	 */
 
-	write (message, options) {
+	async write (message, options) {
 
 		/**
 		 * Bson
@@ -251,7 +257,7 @@ class Protocol extends events {
 		 *
 		 */
 
-		return this.___writeZip(buffer, options)
+		return await this.___writeZip(buffer, options)
 
 	}
 
@@ -259,7 +265,7 @@ class Protocol extends events {
 	 *
 	 */
 
-	___writeZip (decompressed, options) {
+	async ___writeZip (decompressed, options) {
 
 		/**
 		 * Skip header (16 bytes)
@@ -271,7 +277,7 @@ class Protocol extends events {
 		 * Compress
 		 */
 
-		const compressed = zlib.deflateSync(to_be_compressed)
+		const compressed = await new Promise((resolve) => zlib.deflate(to_be_compressed, resolve))
 
 		/**
 		 * Full compressed buffer

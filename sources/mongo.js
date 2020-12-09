@@ -15,6 +15,12 @@ const LOG = require("jiu-jitsu-log")
  *
  */
 
+const INSTANCES = {}
+
+/**
+ *
+ */
+
 const Protocol = require("./protocol")
 
 /**
@@ -33,6 +39,22 @@ class Mongo {
 		this.___protocol = null
 		this.___options = options
 		this.___promises = {}
+	}
+
+	/**
+	 *
+	 */
+
+	static set (db, instance) {
+		INSTANCES[db] = instance
+	}
+
+	/**
+	 *
+	 */
+
+	static get (db) {
+		return INSTANCES[db]
 	}
 
 	/**

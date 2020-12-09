@@ -9,13 +9,13 @@ const net = require("net")
  *
  */
 
-const ___log = require("jiu-jitsu-log")
+const LOG = require("jiu-jitsu-log")
 
 /**
  *
  */
 
-const ___protocol = require("./protocol")
+const Protocol = require("./protocol")
 
 /**
  *
@@ -50,7 +50,7 @@ class Mongo {
 	async ___connect (resolve) {
 		const options = this.___options
 		this.___socket = new net.Socket()
-		this.___protocol = new ___protocol()
+		this.___protocol = new Protocol()
 		this.___protocol.on("message", async (message) => await this.___onProtocolMessage(message))
 		this.___socket.on("connect", async (error) => await this.___onSocketConnect(error, resolve))
 		this.___socket.on("error", async (error) => await this.___onSocketError(error))
@@ -64,7 +64,7 @@ class Mongo {
 
 	async ___onSocketConnect (error, resolve) {
 		const options = this.___options
-		await ___log("jiu-jitsu-mongo", "OK", `${options.db} ✔`)
+		new LOG("jiu-jitsu-mongo|CONNECT", "OK", [`${options.db} ✔`], true)
 		resolve(error)
 	}
 
@@ -74,7 +74,7 @@ class Mongo {
 
 	async ___onSocketError (error) {
 		const options = this.___options
-		await ___log("jiu-jitsu-mongo", "FAIL", `${options.db} !`, error, true)
+		new LOG("jiu-jitsu-mongo|CONNECT", "ERROR", [`${options.db} ✔`, error], true)
 		process.exit(1)
 	}
 
